@@ -1,0 +1,42 @@
+#include<reg52.h>
+
+sbit ADDR0=P1^0;
+sbit ADDR1=P1^1;
+sbit ADDR2=P1^2;
+sbit ADDR3=P1^3;
+sbit ENLED=P1^4;
+
+void main()
+{   int cnt=0;
+ 	ENLED=0;
+	ADDR3=1;
+	ADDR2=0;
+	ADDR1=0;
+	ADDR0=0;
+
+
+	TMOD=0x01;
+	TH0=0xEE;
+	TL0=0x00;	//5ms溢出一次
+	TR0=1;
+
+	while(1)
+	{	
+	 	if(TF0==1)
+		{
+		    TF0=0;
+		 	TH0=0xEE;
+			TL0=0x00;
+			cnt++;
+			if(cnt>=1)	 //50ms
+			{
+			 cnt=0;
+			 P0=0xFE;
+			 }
+			 else
+			 {
+				P0=0xFF;
+				}
+		}
+	}
+}
